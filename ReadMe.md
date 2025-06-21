@@ -1,10 +1,14 @@
-intel 6-14代pve虚拟机核显直通使用rom 使用说明 只支持qemu7.0--qemu9.2版本，不支持qemu10
+intel 6-14代pve虚拟机核显直通使用rom 使用说明，只支持qemu 10及以上（不支持qemu 7 8 9）
 
-Usage Instructions for Intel 6th-14th Generation CPU Integrated GPU Passthrough in PVE Virtual Machines using Custom ROM Files
+Usage Instructions for Intel 6th-14th Generation CPU Integrated GPU Passthrough in PVE Virtual Machines using Custom ROM Files，Only supports QEMU 10 and above (does not support QEMU 7, 8, or 9)
 
-qemu9.2版本上游源码问题使用直接花屏不支持请降级使用9.1，apt reinstall pve-qemu-kvm=9.1.2-3 或者使用我的项目 https://github.com/lixiaoliu666/pve-anti-detection 的9.2版本deb包解决花屏无bios画面问题。不支持ultra1 2代台式机和笔记本，没机器测试懒得搞。
+dpkg -l|grep kvm 运行这个命名，查看qemu版本，下面的10.0.2-1代表qemu 10 如果是9.2代表qemu 9.2
 
-"The upstream source code of QEMU 9.2 has compatibility issues causing screen tearing. Please downgrade to version 9.1. apt reinstall pve-qemu-kvm=9.1.2-3  or  use the 9.2 version deb package from my project: https://github.com/lixiaoliu666/pve-anti-detection . Note that Ultra 1/2 generation desktops and laptops are unsupported，no testing was done due to lack of devices.
+ii pve-qemu-kvm             10.0.2-1              amd64    Full virtualization on x86 hardware 
+
+可以使用我的项目 https://github.com/lixiaoliu666/pve-anti-detection 的10.0版本deb实现q35有bios画面pve核显直通。不支持ultra1 2代台式机和笔记本，没机器测试懒得搞。
+
+You can use the 10.0 version deb package from my project: https://github.com/lixiaoliu666/pve-anti-detection  enables Q35 BIOS display and integrated graphics passthrough in Proxmox VE (PVE). Note that Ultra 1/2 generation desktops and laptops are unsupported，no testing was done due to lack of devices.
 
 交流qq群 25438194（666)
 
@@ -31,12 +35,12 @@ For 12th-14th Gen CPUs: Achieved full compatibility.BIOS interface, OS installat
 For 11th Gen Intel CPUs：BIOS interface, OS installation, and graphics driver installation work normally.HDMI audio not detected: Requires modifying BIOS parameters to resolve.Solution Steps：Flash Modified BIOS ,Modify two critical parameters in BIOS settings:iDisplay Audio Link Frequency: Set to 48MHz,iDisplay Audio Link T-Mode: Set to 4T.If issues persist, reduce the values incrementally (e.g., try lower frequencies or T-Mode configurations).
 Refer to Bilibili tutorials (e.g.,  https://www.bilibili.com/video/BV1Mc41147dA ) or search "11th Gen HDMI audio BIOS fix" on Bilibili.
 
-3、6-10代：如果你的机器可以bios开csm并把核显设置为Legacy模式。那你就虚拟机seabios+i440fx或者q35直接用就是，都不需要加载什么rom，即使要加载也是从机器里面提取的而已（具体请参考网上一大堆成功案例。也不需要我这里提供的什么6-14.rom这货）。
+3、6-10代：如果你的机器可以bios开csm并把核显设置为Legacy模式。那你就虚拟机seabios+i440fx或者q35直接用就是，都不需要加载什么rom，即使要加载也是从机器里面提取的而已（具体请参考网上一大堆成功案例。也不需要我这里提供的什么6-14-qemu10.rom这货）。
 
 For 6th-10th Gen Intel CPUs: If your machine supports enabling CSM in BIOS and setting the integrated graphics (iGPU) to Legacy mode, you can directly use the SeaBIOS + i440fx/Q35 configuration in a virtual machine.
-No additional ROM files are required (e.g., 6-14.rom mentioned in some guides). Even if a ROM is needed, it should be extracted from your own hardware (refer to widely available online success cases).
+No additional ROM files are required (e.g., 6-14-qemu10.rom mentioned in some guides). Even if a ROM is needed, it should be extracted from your own hardware (refer to widely available online success cases).
 
-我这里是主要针对6-10代小主机或者笔记本等bios没有开csm选项或者没法核显设置为Legacy模式使用，虚拟机只能用ovmf+i440fx加载6-14.rom使用，但是呢有些机器他还是有小bug的，会和这个项目 https://github.com/my33love/gk41-pve-ovmf 中的描述症状一样：WIN10 直通安装没有任何问题，可以正常直通到物理显示器，但是一旦装了UHD驱动就黑屏了，只能RDP远程进去，暂时没找到解决办法！ubuntu测试完美，直通安装与安装完显示器都能在4K 60HZ下工作。我在j4105机器上遇见一样的问题，不管是用最新的6-10代核显驱动还是2019年及以前发布的6-10代核显驱动，只要一驱动了必黑屏。这是前人源代码埋下来的坑，快4年了无人解决，我也解决不了，找我没用。有网友反馈驱动黑屏问题是因为硬盘分区表问题，用mbr就可以了，我估计4-10代如果安装核显后驱动黑屏，大家可以试下安装的时候硬盘用mbr，实在不会就选择ide硬盘给win10虚拟机试试，如果能解决记得反馈。
+我这里是主要针对6-10代小主机或者笔记本等bios没有开csm选项或者没法核显设置为Legacy模式使用，虚拟机只能用ovmf+i440fx加载6-14-qemu10.rom使用，但是呢有些机器他还是有小bug的，会和这个项目 https://github.com/my33love/gk41-pve-ovmf 中的描述症状一样：WIN10 直通安装没有任何问题，可以正常直通到物理显示器，但是一旦装了UHD驱动就黑屏了，只能RDP远程进去，暂时没找到解决办法！ubuntu测试完美，直通安装与安装完显示器都能在4K 60HZ下工作。我在j4105机器上遇见一样的问题，不管是用最新的6-10代核显驱动还是2019年及以前发布的6-10代核显驱动，只要一驱动了必黑屏。这是前人源代码埋下来的坑，快4年了无人解决，我也解决不了，找我没用。有网友反馈驱动黑屏问题是因为硬盘分区表问题，用mbr就可以了，我估计4-10代如果安装核显后驱动黑屏，大家可以试下安装的时候硬盘用mbr，实在不会就选择ide硬盘给win10虚拟机试试，如果能解决记得反馈。
 
 Here, it mainly concerns situations where the BIOS of small host computers or laptops from the 6th to 10th generations doesn't have the CSM option enabled, or the integrated graphics cannot be set to the Legacy mode. For virtual machines, one can only use OVMF + i440fx to load the 6 - 14.rom. However, some machines still have minor glitches, with symptoms similar to those described in this project: https://github.com/my33love/gk41-pve-ovmf.
 When directly installing Windows 10, there are no issues, and it can be directly connected to a physical monitor. But once the UHD driver is installed, the screen goes black, and one can only access it via RDP remotely. So far, no solution has been found. Ubuntu has been tested and works perfectly. Both during the direct installation and after installation, the monitor can operate at 4K 60HZ.
@@ -46,16 +50,15 @@ Some netizens have reported that the black - screen issue after driver installat
 
 三、关于虚拟机机型设置Virtual Machine Configuration Settings：
 
-intel核显直通6-14代统一使用ovmf+i440fx机型（i440fx至少7.0以上到最新都可以），当然也支持ovmf+q35（这个说下是可以的，大家就别去折腾找虐了，i440fx足够稳定了，我都是劝人放弃q35这个想法，q35看看这两个视频就是了 https://www.bilibili.com/video/BV1gu4m1K7CX 和 https://www.bilibili.com/video/BV1VS411w7ko ，别去浪费时间折腾，直接玩独显q35直通没烦恼）
+intel核显直通6-14代统一使用ovmf+i440fx机型（i440fx至少10.0以上到最新都可以），当然也支持ovmf+q35 10（详细请看 https://www.bilibili.com/read/cv41702099）
 
-For Intel integrated graphics passthrough across 6th to 14th generations, it is recommended to unify the configuration using OVMF + i440fx machine type (i440fx version 7.0 or newer). While OVMF + q35 is technically supported, we strongly advise against wasting time troubleshooting q35 for integrated graphics passthrough.q35 is incompatible with Intel iGPU.
-
+For Intel integrated graphics passthrough across 6th to 14th generations, it is recommended to unify the configuration using OVMF + i440fx machine type (i440fx version 10.0 or newer). While OVMF + q35 10 is technically supported（more vist https://www.bilibili.com/read/cv41702099 ）
 
 四、关于编译源码About source code compilation：
 
-如果你不想编译直接使用，请在Build文件夹中直接使用6-14.rom就是
+如果你不想编译直接使用，请在Build文件夹中直接使用6-14-qemu10.rom就是
 
-If you don't want to compile and prefer to use it directly, simply use the 6-14.rom file in the Build folder.
+If you don't want to compile and prefer to use it directly, simply use the 6-14-qemu10.rom file in the Build folder.
 
 4.1 编译准备工作preparatory work for compilation：
 
@@ -104,24 +107,24 @@ bios:ovmf
 
 cpu: host
 
-hostpci0: 0000:00:02.0,legacy-igd=1,romfile=6-14.rom
+hostpci0: 0000:00:02.0,legacy-igd=1,romfile=6-14-qemu10.rom
 
 hostpci1: 0000:00:1f.3
 
 vga: none
 
-machine: pc-i440fx-8.0
+machine: pc-i440fx-10.0
 
 
-选择 ovmf+机型i440fx 7.0以上就是 use ovmf+i440fx 7.0 above
+选择 ovmf+机型i440fx 10.0以上就是 use ovmf+i440fx 10.0 above
 0000:00:02.0是核显的pci编号 is igpu pci number
 
 0000:00:1f.3是声卡的pci编号 is sound card pci number，11-14代基本是这个For 11th-14th Gen CPUs is this number，6-10代不一定是这个有些是1e.0之类的 For 6th-10th Gen CPUs maybe 1e.0 
 
-6-14.rom这个文件请用winscp等软件传输到/usr/share/kvm/ 目录下  6-14.rom file you can use winscp upload to /usr/share/kvm/
+6-14-qemu10.rom这个文件请用winscp等软件传输到/usr/share/kvm/ 目录下  6-14-qemu10.rom file you can use winscp upload to /usr/share/kvm/
 
 
-当然unraid也可以使用6-14.rom unraid also can use 6-14.rom
+当然unraid也可以使用6-14-qemu10.rom unraid also can use 6-14-qemu10.rom
 
 参数解释Parameter Explanation：
 1⃣️x-igd-opregion=on：实现物理输出，它是实验性的（x代表experimental实验性的，官方不支持就一直是实验性）（The x-igd-opregion property exposes opregion (VBT included) to guest driver so that the guest driver could parse display connector information from. This property mandatory for the Windows VM to enable display output.）
@@ -130,7 +133,7 @@ machine: pc-i440fx-8.0
 
 3⃣️legacy-igd=1这个是pve私有参数（其他没这个参数比如unraid）让核显Legacy模式显示画面 
 
-参数解释详见refer to  https://eci.intel.com/docs/3.0/components/kvm-hypervisor.html Passthrough KVM Graphics Device部分sub
+参数解释详见refer to  https://eci.intel.com/docs/3.3/components/kvm-hypervisor.html Passthrough KVM Graphics Device部分sub
 
 4.3 虚拟机开机点不亮bios画面The virtual machine fails to display the BIOS screen on startup.
 
@@ -144,7 +147,7 @@ Place the extracted IntelGopDriver.efi into the \Build directory.
 Modify the command-line script (auto-generate-88-in-1-rom.bat) to include the new IntelGopDriver.efi.
 Run the modified script to synthesize the 88-in-1 ROM file.
 
-③、合并了新的6-14.rom你直接用就是 use your synthesize 6-14.rom
+③、合并了新的6-14-qemu10.rom你直接用就是 use your synthesize 6-14-qemu10.rom
 
 4.4 如何稳定使用How to use it stably
 
@@ -156,14 +159,14 @@ Run the modified script to synthesize the 88-in-1 ROM file.
 
 ③、参数x-igd-gms=0x2改为0x8 或者 0x10，最大只能0x10，qemu9版本以下超过就要报错 Unsupported IGD GMS value 0x11，最新的qemu9版本不作限制了，可以到0xf0也就是5120M 5G核显了 对应 源码if (gms < 0xf0) {return gms * 32 * MiB;} 
 
-④、6-14.rom出现点不亮核显直通后bios画面黑屏问题或者1 2 3步骤都弄了都还有花屏闪屏问题的解决办法:
+④、6-14-qemu10.rom出现点不亮核显直通后bios画面黑屏问题或者1 2 3步骤都弄了都还有花屏闪屏问题的解决办法:
 
-6-14.rom是一个通用的大杂烩rom(吹牛的88合一rom),里面集成了太多的gop.efi文件（这些gop.efi不一定是最新的），这些gop文件在同代cpu不同架构之间（比如12代的n100和12代12700这两种不同架构或者类别cpu）核显直通的时候可能互相干扰，导致核显直通可能只有hdmi接口能点亮bios画面或者只有dp接口能点亮bios画面，或者只有typec接口能点亮bios画面，以及两种接口一起插入都点不亮bios画面等等情况，会让你造成显示接口优先输出的假象，解决办法就是，自己生成单独的rom，只添加一个gop.efi来生成rom（屏蔽掉多个gop.efi加进去出现互相干扰）
+6-14-qemu10.rom是一个通用的大杂烩rom(吹牛的88合一rom),里面集成了太多的gop.efi文件（这些gop.efi不一定是最新的），这些gop文件在同代cpu不同架构之间（比如12代的n100和12代12700这两种不同架构或者类别cpu）核显直通的时候可能互相干扰，导致核显直通可能只有hdmi接口能点亮bios画面或者只有dp接口能点亮bios画面，或者只有typec接口能点亮bios画面，以及两种接口一起插入都点不亮bios画面等等情况，会让你造成显示接口优先输出的假象，解决办法就是，自己生成单独的rom，只添加一个gop.efi来生成rom（屏蔽掉多个gop.efi加进去出现互相干扰）
 
 比如
-EfiRom.exe -e 12-n100.efi IgdAssignmentDxe.efi PlatformGOPPolicy.efi -f 0x8086 -i 0xffff -o 6-14.rom
+EfiRom.exe -e 12-n100.efi IgdAssignmentDxe.efi PlatformGOPPolicy.efi -f 0x8086 -i 0xffff -o 6-14-qemu10.rom
 
-EfiRom.exe -e IntelGopDriver.efi IgdAssignmentDxe.efi PlatformGOPPolicy.efi -f 0x8086 -i 0xffff -o 6-14.rom
+EfiRom.exe -e IntelGopDriver.efi IgdAssignmentDxe.efi PlatformGOPPolicy.efi -f 0x8086 -i 0xffff -o 6-14-qemu10.rom
 这样生成你自己处理器的单独rom后你进行测试 IntelGopDriver.efi你通过提取你物理机bios或者下载的官网bios然后用ubu软件或者mmtool软件进行提取而来。， 0xffff改不改成对应的id无所谓。详见4.5 IntelGopDriver.efi如何得来以及怎么提取出来的。
 
 4.5、IntelGopDriver.efi如何得来
@@ -186,7 +189,7 @@ UBU 1.79.17下载地址：https://pan.baidu.com/s/1pD7NqJoOThQawJw59NyTHQ 提取
 
 4.7、源码来源
 
-https://eci.intel.com/docs/3.0.2/components/kvm-hypervisor.html?highlight=igd
+https://eci.intel.com/docs/3.3/components/kvm-hypervisor.html?highlight=igd
 
 Build OVMF.fd for KVM 中的0001-0004.....patch这4个补丁，这4个补丁和https://bugzilla.tianocore.org/show_bug.cgi?id=935 没有本质区别。
 
@@ -196,7 +199,7 @@ Build OVMF.fd for KVM 中的0001-0004.....patch这4个补丁，这4个补丁和h
 
 Intel 4-14代核显直通源码讲解视频，从此再也没有闭源折腾人了，再也没有秘密可言了，希望后来人继续折腾继续贡献源码
 
-4.9、如果你觉得以上操作都麻烦，可以直接fork本项目，然后直接actions进行云编译,或者直接下载本项目云编译releases里面的6-14.rom和分别的rom https://github.com/lixiaoliu666/intel6-14rom/releases
+4.9、如果你觉得以上操作都麻烦，可以直接fork本项目，然后直接actions进行云编译,或者直接下载本项目云编译releases里面的6-14-qemu10.rom和分别的rom https://github.com/lixiaoliu666/intel6-14rom/releases
 
 感谢佛西和蜗牛网友写的actions能够实现本项目自动云编译和云发布releases
 
