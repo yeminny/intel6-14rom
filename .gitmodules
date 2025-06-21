@@ -1,3 +1,7 @@
 [submodule "edk2"]
 	path = edk2
 	url = https://github.com/tianocore/edk2.git
+[submodule "VfioIgdPkg"]
+	path = VfioIgdPkg
+	url = https://github.com/tomitamoeko/VfioIgdPkg.git
+
