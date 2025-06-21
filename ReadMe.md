@@ -103,13 +103,13 @@ reboot
 
 ④、新建win虚拟机并修改虚拟机参数Create a Windows virtual machine and modify its configuration parameters（nano /etc/pve/qemu-server/100.conf ）为类似下面 like this：
 
-args: -set device.hostpci0.addr=02.0 -set device.hostpci0.x-igd-gms=0x2 -set device.hostpci0.x-igd-opregion=on
+args: -set device.hostpci0.addr=02.0 -set device.hostpci0.x-igd-gms=0x2 -set device.hostpci0.x-igd-opregion=on -set device.hostpci0.x-igd-legacy-mode=on
 
 bios:ovmf
 
 cpu: host
 
-hostpci0: 0000:00:02.0,legacy-igd=1,romfile=6-14-qemu10.rom
+hostpci0: 0000:00:02.0,romfile=6-14-qemu10.rom
 
 hostpci1: 0000:00:1f.3
 
@@ -134,6 +134,8 @@ machine: pc-i440fx-10.0
 2⃣️x-igd-gms=0x2代表使用核显预分配显存大小，解决虚拟机内存占用过大问题，这个要大于bios中的核显显存大小，源码是gms * 32 * MiB;这样计算的，0x1代表32M，0x2=64M，0x3=96M，0x4=128M，0x5=160M，0x6=192M，0x7=224M，0x8=256m，0x9=288M，0x10=320M，0xf0=5120M（The x-igd-gms property sets a value multiplied by 32 as the amount of pre-allocated memory (in units of MB) to support IGD in VGA modes.） 
 
 3⃣️legacy-igd=1这个是pve私有参数（其他没这个参数比如unraid）让核显Legacy模式显示画面 
+
+④ x-igd-legacy-mode=on  Enable/Disable legacy mode，这个是qemu10才有的通用参数，完全可以 x-igd-legacy-mode=on替代pve的legacy-igd=1私有参数
 
 参数解释详见refer to  https://eci.intel.com/docs/3.3/components/kvm-hypervisor.html Passthrough KVM Graphics Device部分sub
 
