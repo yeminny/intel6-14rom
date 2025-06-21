@@ -1,4 +1,4 @@
-intel 6-14代pve虚拟机核显直通使用rom 使用说明
+intel 6-14代pve虚拟机核显直通使用rom 使用说明 只支持qemu7.0--qemu9.2版本，不支持qemu10
 
 Usage Instructions for Intel 6th-14th Generation CPU Integrated GPU Passthrough in PVE Virtual Machines using Custom ROM Files
 
