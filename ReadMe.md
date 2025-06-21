@@ -62,6 +62,8 @@ If you don't want to compile and prefer to use it directly, simply use the 6-14-
 
 4.1 编译准备工作preparatory work for compilation：
 
+可以直接fork本项目后点Actions进行云编译，也可以下面步骤下载到本地编译。You can either fork this repository and click on Actions to perform cloud compilation, or follow the steps below to download the project for local compilation.
+
 ①、首先下载本项目Download this project first
 
 git clone https://github.com/lixiaoliu666/intel6-14rom 可能会断掉，请多试几次。你可以使用代理加速（如何切换git clone后的版本自行百度）。
