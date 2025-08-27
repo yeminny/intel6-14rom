@@ -6,9 +6,9 @@ dpkg -l|grep kvm 运行这个命名，查看qemu版本，下面的10.0.2-1代表
 
 ii pve-qemu-kvm             10.0.2-1              amd64    Full virtualization on x86 hardware 
 
-可以使用我的项目 https://github.com/lixiaoliu666/pve-anti-detection 的10.0版本deb实现q35有bios画面pve核显直通。不支持ultra1 2代台式机和笔记本，没机器测试懒得搞。
+可以使用我的项目 https://github.com/lixiaoliu666/pve-anti-detection 的10.0版本deb实现q35有bios画面pve核显直通。ultra1 2代台式机和笔记本核显直通请使用 https://github.com/lixiaoliu666/intel-ultra-rom
 
-You can use the 10.0 version deb package from my project: https://github.com/lixiaoliu666/pve-anti-detection  enables Q35 BIOS display and integrated graphics passthrough in Proxmox VE (PVE). Note that Ultra 1/2 generation desktops and laptops are unsupported，no testing was done due to lack of devices.
+You can use the 10.0 version deb package from my project: https://github.com/lixiaoliu666/pve-anti-detection  enables Q35 BIOS display and integrated graphics passthrough in Proxmox VE (PVE). Ultra 1/2 generation desktops and laptops GPU Passthrough you can use https://github.com/lixiaoliu666/intel-ultra-rom
 
 交流qq群 25438194（666)
 
@@ -236,3 +236,4 @@ https://foxi.buduanwang.vip/virtualization/pve/1602.html/
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=lixiaoliu666/intel6-14rom&type=Date)](https://www.star-history.com/#lixiaoliu666/intel6-14rom&Date)
+
